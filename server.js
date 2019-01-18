@@ -2,6 +2,8 @@
 
 var express = require('express');
 var cors = require('cors');
+var multer  = require('multer')
+var upload = multer({ dest: '/tmp' })
 
 // require and use "multer"...
 
@@ -13,6 +15,16 @@ app.use('/public', express.static(process.cwd() + '/public'));
 app.get('/', function (req, res) {
      res.sendFile(process.cwd() + '/views/index.html');
   });
+
+app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
+  
+  if(req.file)
+  {
+    res.json({name:req.file.originalname,size:req.file.size});
+  }
+  // req.file is the `avatar` file
+  // req.body will hold the text fields, if there were any
+})
 
 app.get('/hello', function(req, res){
   res.json({greetings: "Hello, API"});
